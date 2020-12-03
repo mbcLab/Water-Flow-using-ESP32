@@ -17,7 +17,6 @@ unsigned long oldTime       = 0;
 
 void setup() {
   Serial.begin(115200);
-  Serial.println();
 
   //Menghubungkan ke WiFi
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
@@ -30,7 +29,7 @@ void setup() {
   Serial.print("connected: ");
   Serial.println(WiFi.localIP());
 
-  //Authentikasi ke Firebase
+  //Inisialisasi ke Firebase
   Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
   
   attachInterrupt(pin_waterflow, pulseCounter, CHANGE);
@@ -43,14 +42,12 @@ void loop() {
     volume  += debit;
 
     //Mengirim ke Firebase
-    Firebase.setString("Air/debit", String(debit));
-    Firebase.setString("Air/volume", String(volume));
+    Firebase.setString("Air/debit", String(debit) + " L/min");
+    Firebase.setString("Air/volume", String(volume) + " liters");
 
     //Menampilkan ke serial monitor
-    Serial.print("debit: ");
-    Serial.println(debit);
-    Serial.print("volume: ");
-    Serial.println(volume);
+    Serial.println("Debit: " + String(debit) + " L/min");
+    Serial.println("Volume: " + String(volume) + " liters");
     oldTime = millis();
     pulseCount = 0;
   }
